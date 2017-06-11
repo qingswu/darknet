@@ -1,6 +1,6 @@
-GPU=0
-CUDNN=0
-OPENCV=0
+GPU=1
+CUDNN=1
+OPENCV=1
 DEBUG=0
 
 ARCH= -gencode arch=compute_20,code=[sm_20,sm_21] \
@@ -11,6 +11,7 @@ ARCH= -gencode arch=compute_20,code=[sm_20,sm_21] \
 
 # This is what I use, uncomment if you know your arch and want to specify
 # ARCH= -gencode arch=compute_52,code=compute_52
+ARCH= -gencode arch=compute_61,code=compute_61
 
 VPATH=./src/:./examples
 LIB=libdarknet.so
