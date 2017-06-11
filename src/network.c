@@ -247,6 +247,7 @@ void backward_network(network net)
     }
 }
 
+#if 0
 float train_network_datum(network net)
 {
 #ifdef GPU
@@ -290,6 +291,7 @@ float train_network(network net, data d)
     }
     return (float)sum/(n*batch);
 }
+#endif
 
 void set_batch_network(network *net, int b)
 {

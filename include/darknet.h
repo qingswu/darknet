@@ -3,7 +3,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
+#if 0
 #include <pthread.h>
+#endif 
 
 #define SECRET_NUM -1234
 extern int gpu_index;
@@ -31,12 +34,26 @@ extern int gpu_index;
     #endif
 #endif
 
+#ifdef _WIN32
+#define DARKNET_EXPORTS __declspec(dllexport)
+#else
+#define DARKNET_EXPORTS
+#endif
+
 typedef struct{
     int classes;
     char **names;
 } metadata;
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 metadata get_metadata(char *file);
+
+#ifdef __cplusplus
+}
+#endif  // __cplusplus
 
 typedef struct{
     int *leaf;
@@ -386,7 +403,15 @@ struct layer{
 #endif
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 void free_layer(layer);
+
+#ifdef __cplusplus
+}
+#endif  // __cplusplus
 
 typedef enum {
     CONSTANT, STEP, EXP, POLY, STEPS, SIG, RANDOM
@@ -533,12 +558,19 @@ typedef struct{
     float left, right, top, bottom;
 } box_label;
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 network load_network(char *cfg, char *weights, int clear);
 network *load_network_p(char *cfg, char *weights, int clear);
 load_args get_base_args(network net);
-
 void free_data(data d);
+
+#ifdef __cplusplus
+}
+#endif  // __cplusplus
+
 
 typedef struct node{
     void *val;
@@ -552,7 +584,13 @@ typedef struct list{
     node *back;
 } list;
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
+#if 0
 pthread_t load_data(load_args args);
+#endif
 list *read_data_cfg(char *filename);
 list *read_cfg(char *filename);
 
@@ -614,25 +652,25 @@ void rgbgr_weights(layer l);
 image *get_weights(layer l);
 
 void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const char *filename, char **names, int classes, int frame_skip, char *prefix, int avg, float hier_thresh, int w, int h, int fps, int fullscreen);
-void get_detection_boxes(layer l, int w, int h, float thresh, float **probs, box *boxes, int only_objectness);
+DARKNET_EXPORTS void get_detection_boxes(layer l, int w, int h, float thresh, float **probs, box *boxes, int only_objectness);
 
 char *option_find_str(list *l, char *key, char *def);
 int option_find_int(list *l, char *key, int def);
 
-network parse_network_cfg(char *filename);
+DARKNET_EXPORTS network parse_network_cfg(char *filename);
 void save_weights(network net, char *filename);
-void load_weights(network *net, char *filename);
+DARKNET_EXPORTS void load_weights(network *net, char *filename);
 void save_weights_upto(network net, char *filename, int cutoff);
 void load_weights_upto(network *net, char *filename, int start, int cutoff);
 
 void zero_objectness(layer l);
-void get_region_boxes(layer l, int w, int h, int netw, int neth, float thresh, float **probs, box *boxes, int only_objectness, int *map, float tree_thresh, int relative);
+DARKNET_EXPORTS void get_region_boxes(layer l, int w, int h, int netw, int neth, float thresh, float **probs, box *boxes, int only_objectness, int *map, float tree_thresh, int relative);
 void free_network(network net);
-void set_batch_network(network *net, int b);
+DARKNET_EXPORTS void set_batch_network(network *net, int b);
 image load_image(char *filename, int w, int h, int c);
 image load_image_color(char *filename, int w, int h);
 image make_image(int w, int h, int c);
-image resize_image(image im, int w, int h);
+DARKNET_EXPORTS image resize_image(image im, int w, int h);
 image letterbox_image(image im, int w, int h);
 image crop_image(image im, int dx, int dy, int w, int h);
 image resize_min(image im, int min);
@@ -664,7 +702,7 @@ void rotate_image_cw(image im, int times);
 image rotate_image(image m, float rad);
 void visualize_network(network net);
 float box_iou(box a, box b);
-void do_nms(box *boxes, float **probs, int total, int classes, float thresh);
+DARKNET_EXPORTS void do_nms(box *boxes, float **probs, int total, int classes, float thresh);
 data load_all_cifar10();
 box_label *read_boxes(char *filename, int *n);
 void draw_detections(image im, int num, float thresh, box *boxes, float **probs, char **names, image **labels, int classes);
@@ -672,7 +710,7 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
 matrix network_predict_data(network net, data test);
 image **load_alphabet();
 image get_network_image(network net);
-float *network_predict(network net, float *input);
+DARKNET_EXPORTS float *network_predict(network net, float *input);
 float *network_predict_p(network *net, float *input);
 
 int network_width(network *net);
@@ -691,8 +729,10 @@ image get_image_from_stream(CvCapture *cap);
 #endif
 #endif
 void free_image(image m);
+#if 0
 float train_network(network net, data d);
 pthread_t load_data_in_thread(load_args args);
+#endif
 list *get_paths(char *filename);
 void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride);
 void change_leaves(tree *t, char *leaf_list);
@@ -710,8 +750,8 @@ float sec(clock_t clocks);
 void **list_to_array(list *l);
 void top_k(float *a, int n, int k, int *index);
 int *read_map(char *filename);
-void error(const char *s);
-int max_index(float *a, int n);
+DARKNET_EXPORTS void error(const char *s);
+DARKNET_EXPORTS int max_index(float *a, int n);
 int sample_array(float *a, int n);
 void free_list(list *l);
 float mse_array(float *a, int n);
@@ -722,5 +762,9 @@ void normalize_array(float *a, int n);
 int *read_intlist(char *s, int *n, int d);
 size_t rand_size_t();
 float rand_normal();
+
+#ifdef __cplusplus
+}
+#endif  // __cplusplus
 
 #endif

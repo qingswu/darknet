@@ -92,6 +92,7 @@ void update_network_gpu(network net)
     }
 }
 
+#if 0
 void harmless_update_network_gpu(network net)
 {
     cuda_set_device(net.gpu_index);
@@ -148,6 +149,7 @@ pthread_t train_network_in_thread(network net, data d, float *err)
     if(pthread_create(&thread, 0, train_thread, ptr)) error("Thread creation failed");
     return thread;
 }
+#endif
 
 void merge_weights(layer l, layer base)
 {
@@ -333,6 +335,7 @@ void *sync_layer_thread(void *ptr)
     return 0;
 }
 
+#if 0
 pthread_t sync_layer_in_thread(network *nets, int n, int j)
 {
     pthread_t thread;
@@ -394,6 +397,7 @@ float train_networks(network *nets, int n, data d, int interval)
     free(errors);
     return (float)sum/(n);
 }
+#endif
 
 void pull_network_output(network net)
 {

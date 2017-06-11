@@ -7,6 +7,7 @@
 #include "parser.h"
 #include "box.h"
 
+#if 0
 void train_compare(char *cfgfile, char *weightfile)
 {
     srand(time(0));
@@ -144,6 +145,7 @@ void validate_compare(char *filename, char *weightfile)
         free_data(val);
     }
 }
+#endif
 
 typedef struct {
     network net;
@@ -330,6 +332,7 @@ void BattleRoyaleWithCheese(char *filename, char *weightfile)
     printf("Tournament in %d compares, %f secs\n", total_compares, sec(clock()-time));
 }
 
+#if 0
 void run_compare(int argc, char **argv)
 {
     if(argc < 4){
@@ -350,3 +353,4 @@ void run_compare(int argc, char **argv)
        else if(0==strcmp(argv[2], "valid")) validate_recall(cfg, weights);
      */
 }
+#endif

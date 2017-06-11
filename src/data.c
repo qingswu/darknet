@@ -7,7 +7,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if 0
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
 
 list *get_paths(char *filename)
 {
@@ -39,6 +41,7 @@ char **get_random_paths_indexes(char **paths, int n, int m, int *indexes)
 }
 */
 
+#if 0
 char **get_random_paths(char **paths, int n, int m)
 {
     char **random_paths = calloc(n, sizeof(char*));
@@ -52,6 +55,7 @@ char **get_random_paths(char **paths, int n, int m)
     pthread_mutex_unlock(&mutex);
     return random_paths;
 }
+#endif
 
 char **find_replace_paths(char **paths, int n, char *find, char *replace)
 {
@@ -360,6 +364,7 @@ void fill_truth_captcha(char *path, int n, float *truth)
     }
 }
 
+#if 0
 data load_data_captcha(char **paths, int n, int m, int k, int w, int h)
 {
     if(m) paths = get_random_paths(paths, n, m);
@@ -386,6 +391,7 @@ data load_data_captcha_encode(char **paths, int n, int m, int w, int h)
     if(m) free(paths);
     return d;
 }
+#endif
 
 void fill_truth(char *path, char **labels, int k, float *truth)
 {
@@ -584,6 +590,7 @@ image get_segmentation_image(char *path, int w, int h, int classes)
     return mask;
 }
 
+#if 0
 data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
 {
     char **random_paths = get_random_paths(paths, n, m);
@@ -1372,4 +1379,4 @@ data *split_data(data d, int part, int total)
     split[1] = test;
     return split;
 }
-
+#endif
