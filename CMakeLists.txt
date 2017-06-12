@@ -13,36 +13,117 @@ PROJECT(${proj_name} C)
 
 INCLUDE_DIRECTORIES("include")
 
-IF(${CMAKE_SYSTEM_NAME} STREQUAL Windows)
-  SET(CUDA_TOOLKIT_ROOT_DIR "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/")
-ELSE()
-  SET(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda")
-ENDIF()
-FIND_PACKAGE(CUDA REQUIRED)
-ADD_DEFINITIONS(-DGPU -DCUDNN)
-# Pass options to NVCC
-IF(${CMAKE_SYSTEM_NAME} STREQUAL Windows)
-  SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -gencode arch=compute_61,code=sm_61 -Xcompiler ${RT})
-ELSE()
-  SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -gencode arch=compute_61,code=sm_61)
-ENDIF()
+#IF(${CMAKE_SYSTEM_NAME} STREQUAL Windows)
+#SET(CUDA_TOOLKIT_ROOT_DIR "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/")
+#ELSE()
+#SET(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda")
+#ENDIF()
+#FIND_PACKAGE(CUDA REQUIRED)
+#ADD_DEFINITIONS(-DGPU -DCUDNN)
+## Pass options to NVCC
+#IF(${CMAKE_SYSTEM_NAME} STREQUAL Windows)
+#SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -gencode arch=compute_61,code=sm_61 -Xcompiler ${RT})
+#ELSE()
+#SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -gencode arch=compute_61,code=sm_61)
+#ENDIF()
 
-FILE(GLOB cu_srcs "src/*.cu")
-SOURCE_GROUP("cuda" FILES ${cu_srcs})
-cuda_compile(cu_objs ${cu_srcs})
-SOURCE_GROUP("cuda\\obj" FILES ${cu_objs})
-SET(cuda_objs_and_srcs ${cu_objs} ${cu_srcs})
+#FILE(GLOB cu_srcs "src/*.cu")
+#SOURCE_GROUP("cuda" FILES ${cu_srcs})
+#cuda_compile(cu_objs ${cu_srcs})
+#SOURCE_GROUP("cuda\\obj" FILES ${cu_objs})
+#SET(cuda_objs_and_srcs ${cu_objs} ${cu_srcs})
 
 FIND_PACKAGE(OpenCV REQUIRED)
 ADD_DEFINITIONS(-DOPENCV)
 
-FILE(GLOB hdrs "include/*.h" "src/*.h")
-FILE(GLOB srcs "src/*.c")
-FOREACH(f ${srcs})
-  IF(${f} MATCHES "demo.c$")
-    LIST(REMOVE_ITEM srcs ${f})
-  ENDIF()
-ENDFOREACH()
+FILE(GLOB hdrs "include/darknet.h"
+  src/activation_layer.h
+  src/activations.h
+  src/avgpool_layer.h
+  src/batchnorm_layer.h
+  src/blas.h
+  src/box.h
+  src/classifier.h
+  src/col2im.h
+  src/connected_layer.h
+  src/convolutional_layer.h
+  src/cost_layer.h
+  src/crnn_layer.h
+  src/crop_layer.h
+  src/cuda.h
+  src/data.h
+  src/deconvolutional_layer.h
+  src/demo.h
+  src/detection_layer.h
+  src/dropout_layer.h
+  src/gemm.h
+  src/gru_layer.h
+  src/im2col.h
+  src/image.h
+  src/layer.h
+  src/list.h
+  src/local_layer.h
+  src/lstm_layer.h
+  src/matrix.h
+  src/maxpool_layer.h
+  src/network.h
+  src/normalization_layer.h
+  src/option_list.h
+  src/parser.h
+  src/region_layer.h
+  src/reorg_layer.h
+  src/rnn_layer.h
+  src/route_layer.h
+  src/shortcut_layer.h
+  src/softmax_layer.h
+  #src/stb_image.h
+  #src/stb_image_write.h
+  src/tree.h
+  src/utils.h
+  )
+FILE(GLOB srcs 
+  src/activation_layer.c
+  src/activations.c
+  src/avgpool_layer.c
+  src/batchnorm_layer.c
+  src/blas.c
+  src/box.c
+  src/col2im.c
+  src/compare.c
+  src/connected_layer.c
+  src/convolutional_layer.c
+  src/cost_layer.c
+  src/crnn_layer.c
+  src/crop_layer.c
+  src/cuda.c
+  src/data.c
+  src/deconvolutional_layer.c
+  #src/demo.c
+  src/detection_layer.c
+  src/dropout_layer.c
+  src/gemm.c
+  src/gru_layer.c
+  src/im2col.c
+  src/image.c
+  src/layer.c
+  src/list.c
+  src/local_layer.c
+  src/lstm_layer.c
+  src/matrix.c
+  src/maxpool_layer.c
+  src/network.c
+  src/normalization_layer.c
+  src/option_list.c
+  src/parser.c
+  src/region_layer.c
+  src/reorg_layer.c
+  src/rnn_layer.c
+  src/route_layer.c
+  src/shortcut_layer.c
+  src/softmax_layer.c
+  src/tree.c
+  src/utils.c)
+
 SOURCE_GROUP("Header Files" FILES ${hdrs})
 SOURCE_GROUP("Source Files" FILES ${srcs})
 

@@ -718,8 +718,8 @@ int network_height(network *net);
 float *network_predict_image(network *net, image im);
 
 char **get_labels(char *filename);
-void do_nms_sort(box *boxes, float **probs, int total, int classes, float thresh);
-void do_nms_obj(box *boxes, float **probs, int total, int classes, float thresh);
+DARKNET_EXPORTS void do_nms_sort(box *boxes, float **probs, int total, int classes, float thresh);
+DARKNET_EXPORTS void do_nms_obj(box *boxes, float **probs, int total, int classes, float thresh);
 
 matrix make_matrix(int rows, int cols);
 
