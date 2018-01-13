@@ -474,6 +474,7 @@ void fill_truth_captcha(char *path, int n, float *truth)
     }
 }
 
+#if 0
 data load_data_captcha(char **paths, int n, int m, int k, int w, int h)
 {
     if(m) paths = get_random_paths(paths, n, m);
@@ -500,6 +501,7 @@ data load_data_captcha_encode(char **paths, int n, int m, int w, int h)
     if(m) free(paths);
     return d;
 }
+#endif  // 0
 
 void fill_truth(char *path, char **labels, int k, float *truth)
 {
@@ -686,6 +688,7 @@ image get_segmentation_image2(char *path, int w, int h, int classes)
     return mask;
 }
 
+#if 0
 data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int min, int max, float angle, float aspect, float hue, float saturation, float exposure, int div)
 {
     char **random_paths = get_random_paths(paths, n, m);
@@ -891,6 +894,7 @@ data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
     if(m) free(paths);
     return d;
 }
+#endif  // 0
 
 data load_data_swag(char **paths, int n, int classes, float jitter)
 {
@@ -945,6 +949,7 @@ data load_data_swag(char **paths, int n, int classes, float jitter)
     return d;
 }
 
+#if 0
 data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure)
 {
     char **random_paths = get_random_paths(paths, n, m);
@@ -1120,7 +1125,7 @@ data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int 
     if(m) free(paths);
     return d;
 }
-
+#endif  // 0
 /*
    data load_data_study(char **paths, int n, int m, char **labels, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
    {
@@ -1135,6 +1140,7 @@ data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int 
    }
  */
 
+#if 0
 data load_data_super(char **paths, int n, int m, int w, int h, int scale)
 {
     if(m) paths = get_random_paths(paths, n, m);
@@ -1175,6 +1181,7 @@ data load_data_regression(char **paths, int n, int m, int min, int max, int size
     if(m) free(paths);
     return d;
 }
+#endif  // 0
 
 data select_data(data *orig, int *inds)
 {
@@ -1246,6 +1253,7 @@ data resize_data(data orig, int w, int h)
     return d;
 }
 
+#if 0
 data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
 {
     if(m) paths = get_random_paths(paths, n, m);
@@ -1271,6 +1279,7 @@ data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size
     if(m) free(paths);
     return d;
 }
+#endif  // 0
 
 matrix concat_matrix(matrix m1, matrix m2)
 {

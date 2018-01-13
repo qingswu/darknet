@@ -145,7 +145,6 @@ void validate_compare(char *filename, char *weightfile)
         free_data(val);
     }
 }
-#endif
 
 typedef struct {
     network net;
@@ -332,7 +331,6 @@ void BattleRoyaleWithCheese(char *filename, char *weightfile)
     printf("Tournament in %d compares, %f secs\n", total_compares, sec(clock()-time));
 }
 
-#if 0
 void run_compare(int argc, char **argv)
 {
     if(argc < 4){

@@ -1,4 +1,3 @@
-
 #ifndef DARKNET_API
 #define DARKNET_API
 #include <stdlib.h>
@@ -31,6 +30,7 @@ extern int gpu_index;
     #include "opencv2/core/version.hpp"
     #if CV_MAJOR_VERSION == 3
     #include "opencv2/videoio/videoio_c.h"
+    #include "opencv2/imgcodecs/imgcodecs_c.h"
     #endif
     #endif
 #endif
@@ -73,6 +73,10 @@ typedef enum{
     LOGISTIC, RELU, RELIE, LINEAR, RAMP, TANH, PLSE, LEAKY, ELU, LOGGY, STAIR, HARDTAN, LHTAN
 } ACTIVATION;
 
+typedef enum{
+    MULT, ADD, SUB, DIV
+} BINARY_ACTIVATION;
+
 typedef enum {
     CONVOLUTIONAL,
     DECONVOLUTIONAL,
@@ -102,8 +106,20 @@ typedef enum {
 } LAYER_TYPE;
 
 typedef enum{
-    SSE, MASKED, L1, SMOOTH
+    SSE, MASKED, L1, SEG, SMOOTH
 } COST_TYPE;
+
+typedef struct{
+    int batch;
+    float learning_rate;
+    float momentum;
+    float decay;
+    int adam;
+    float B1;
+    float B2;
+    float eps;
+    int t;
+} update_args;
 
 struct network;
 typedef struct network network;
@@ -117,10 +133,10 @@ struct layer{
     COST_TYPE cost_type;
     void (*forward)   (struct layer, struct network);
     void (*backward)  (struct layer, struct network);
-    void (*update)    (struct layer, int, float, float, float);
+    void (*update)    (struct layer, update_args);
     void (*forward_gpu)   (struct layer, struct network);
     void (*backward_gpu)  (struct layer, struct network);
-    void (*update_gpu)    (struct layer, int, float, float, float);
+    void (*update_gpu)    (struct layer, update_args);
     int batch_normalize;
     int shortcut;
     int batch;

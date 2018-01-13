@@ -5,12 +5,10 @@
 #include <stdio.h>
 #include <math.h>
 
-#if 0
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
-#endif
 
 int windows = 0;
 
@@ -664,7 +662,6 @@ void save_image_jpg(image p, const char *name)
 }
 #endif
 
-#if 0
 void save_image_png(image im, const char *name)
 {
     char buff[256];
@@ -690,7 +687,6 @@ void save_image(image im, const char *name)
     save_image_png(im, name);
 #endif
 }
-#endif
 
 void show_image_layers(image p, char *name)
 {
@@ -1410,7 +1406,6 @@ void test_resize(char *filename)
 #endif
 }
 
-#if 0
 image load_image_stb(char *filename, int channels)
 {
     int w, h, c;
@@ -1434,14 +1429,13 @@ image load_image_stb(char *filename, int channels)
     free(data);
     return im;
 }
-#endif
 
 image load_image(char *filename, int w, int h, int c)
 {
 #ifdef OPENCV
     image out = load_image_cv(filename, c);
 #else
-    /*image out = load_image_stb(filename, c);*/
+    image out = load_image_stb(filename, c);
 #endif
 
     if((h && w) && (h != out.h || w != out.w)){
