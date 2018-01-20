@@ -14,7 +14,7 @@ COST_TYPE get_cost_type(char *s)
     if (strcmp(s, "masked")==0) return MASKED;
     if (strcmp(s, "smooth")==0) return SMOOTH;
     if (strcmp(s, "L1")==0) return L1;
-    fprintf(stderr, "Couldn't find cost type %s, going with SSE\n", s);
+    //fprintf(stderr, "Couldn't find cost type %s, going with SSE\n", s);
     return SSE;
 }
 
@@ -37,7 +37,7 @@ char *get_cost_string(COST_TYPE a)
 
 cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float scale)
 {
-    fprintf(stderr, "cost                                           %4d\n",  inputs);
+    //fprintf(stderr, "cost                                           %4d\n",  inputs);
     cost_layer l = {0};
     l.type = COST;
 

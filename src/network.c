@@ -435,7 +435,7 @@ layer get_network_detection_layer(network *net)
             return net->layers[i];
         }
     }
-    fprintf(stderr, "Detection layer not found!!\n");
+    //fprintf(stderr, "Detection layer not found!!\n");
     layer l = {0};
     return l;
 }
@@ -598,11 +598,11 @@ void print_network(network *net)
         int n = l.outputs;
         float mean = mean_array(output, n);
         float vari = variance_array(output, n);
-        fprintf(stderr, "Layer %d - Mean: %f, Variance: %f\n",i,mean, vari);
+        //fprintf(stderr, "Layer %d - Mean: %f, Variance: %f\n",i,mean, vari);
         if(n > 100) n = 100;
-        for(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
-        if(n == 100)fprintf(stderr,".....\n");
-        fprintf(stderr, "\n");
+        //for(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
+        //if(n == 100)fprintf(stderr,".....\n");
+        //fprintf(stderr, "\n");
     }
 }
 
