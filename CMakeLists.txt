@@ -18,19 +18,14 @@ IF(${CMAKE_SYSTEM_NAME} STREQUAL Windows)
 ELSE()
   SET(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda")
 ENDIF()
-FIND_PACKAGE(CUDA REQUIRED)
-ADD_DEFINITIONS(-DGPU -DCUDNN)
-# Pass options to NVCC
-IF(${CMAKE_SYSTEM_NAME} STREQUAL Windows)
-  SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -gencode arch=compute_61,code=sm_61 -Xcompiler ${RT}d)  # manually change ${RT} to ${RT}d for building debug version
-ELSE()
-  SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -gencode arch=compute_61,code=sm_61)
-ENDIF()
-
+FIND_PACKAGE(CUDA QUIET)
+IF(CUDA_FOUND)
   INCLUDE_DIRECTORIES(${CUDA_TOOLKIT_ROOT_DIR}/include)
+  ADD_DEFINITIONS(-DGPU -DCUDNN)
+
   # Pass options to NVCC
   IF(${CMAKE_SYSTEM_NAME} STREQUAL Windows)
-    SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -gencode arch=compute_61,code=sm_61 -Xcompiler ${RT})
+    SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -gencode arch=compute_61,code=sm_61 -Xcompiler ${RT})  # manually change ${RT} to ${RT}d for building debug version
     LINK_DIRECTORIES(${CUDA_TOOLKIT_ROOT_DIR}/lib/x64)
   ELSE()
     SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -gencode arch=compute_61,code=sm_61)
