@@ -35,7 +35,7 @@ extern int gpu_index;
     #endif
 #endif
 
-#ifdef _WIN32
+#ifdef _WIN32 && 0
 #define DARKNET_EXPORTS __declspec(dllexport)
 #else
 #define DARKNET_EXPORTS
