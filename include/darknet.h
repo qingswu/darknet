@@ -3,13 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
-#if 0
-#include <pthread.h>
-#endif
-
-#define SECRET_NUM -1234
-extern int gpu_index;
+// #include <pthread.h>
 
 #ifdef GPU
     #define BLOCK 512
@@ -23,39 +17,19 @@ extern int gpu_index;
     #endif
 #endif
 
-#ifndef __cplusplus
-    #ifdef OPENCV
-    #include "opencv2/highgui/highgui_c.h"
-    #include "opencv2/imgproc/imgproc_c.h"
-    #include "opencv2/core/version.hpp"
-    #if CV_MAJOR_VERSION == 3
-    #include "opencv2/videoio/videoio_c.h"
-    #include "opencv2/imgcodecs/imgcodecs_c.h"
-    #endif
-    #endif
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#ifdef _WIN32
-//#define DARKNET_EXPORTS __declspec(dllexport)
-#define DARKNET_EXPORTS
-#else
-#define DARKNET_EXPORTS
-#endif
+#define SECRET_NUM -1234
+extern int gpu_index;
 
 typedef struct{
     int classes;
     char **names;
 } metadata;
 
-#ifdef __cplusplus
-extern "C" {
-#endif  // __cplusplus
-
 metadata get_metadata(char *file);
-
-#ifdef __cplusplus
-}
-#endif  // __cplusplus
 
 typedef struct{
     int *leaf;
@@ -72,8 +46,12 @@ typedef struct{
 tree *read_tree(char *filename);
 
 typedef enum{
-    LOGISTIC, RELU, RELIE, LINEAR, RAMP, TANH, PLSE, LEAKY, ELU, LOGGY, STAIR, HARDTAN, LHTAN
+    LOGISTIC, RELU, RELIE, LINEAR, RAMP, TANH, PLSE, LEAKY, ELU, LOGGY, STAIR, HARDTAN, LHTAN, SELU
 } ACTIVATION;
+
+typedef enum{
+    PNG, BMP, TGA, JPG
+} IMTYPE;
 
 typedef enum{
     MULT, ADD, SUB, DIV
@@ -104,6 +82,7 @@ typedef enum {
     XNOR,
     REGION,
     YOLO,
+    ISEG,
     REORG,
     UPSAMPLE,
     LOGXENT,
@@ -184,6 +163,7 @@ struct layer{
     float ratio;
     float learning_rate_scale;
     float clip;
+    int noloss;
     int softmax;
     int classes;
     int coords;
@@ -221,6 +201,7 @@ struct layer{
     int dontload;
     int dontsave;
     int dontloadscales;
+    int numload;
 
     float temperature;
     float probability;
@@ -231,6 +212,8 @@ struct layer{
     int   * input_layers;
     int   * input_sizes;
     int   * map;
+    int   * counts;
+    float ** sums;
     float * rand;
     float * cost;
     float * state;
@@ -276,7 +259,7 @@ struct layer{
 
     float * m;
     float * v;
-
+    
     float * bias_m;
     float * bias_v;
     float * scale_m;
@@ -301,7 +284,7 @@ struct layer{
     float *g_cpu;
     float *o_cpu;
     float *c_cpu;
-    float *dc_cpu;
+    float *dc_cpu; 
 
     float * binary_input;
 
@@ -328,7 +311,7 @@ struct layer{
 
     struct layer *input_h_layer;
     struct layer *state_h_layer;
-
+	
     struct layer *wz;
     struct layer *uz;
     struct layer *wr;
@@ -368,7 +351,7 @@ struct layer{
     float *g_gpu;
     float *o_gpu;
     float *c_gpu;
-    float *dc_gpu;
+    float *dc_gpu; 
 
     float *m_gpu;
     float *v_gpu;
@@ -438,15 +421,7 @@ struct layer{
 #endif
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif  // __cplusplus
-
 void free_layer(layer);
-
-#ifdef __cplusplus
-}
-#endif  // __cplusplus
 
 typedef enum {
     CONSTANT, STEP, EXP, POLY, STEPS, SIG, RANDOM
@@ -566,7 +541,7 @@ typedef struct{
 } data;
 
 typedef enum {
-    CLASSIFICATION_DATA, DETECTION_DATA, CAPTCHA_DATA, REGION_DATA, IMAGE_DATA, COMPARE_DATA, WRITING_DATA, SWAG_DATA, TAG_DATA, OLD_CLASSIFICATION_DATA, STUDY_DATA, DET_DATA, SUPER_DATA, LETTERBOX_DATA, REGRESSION_DATA, SEGMENTATION_DATA, INSTANCE_DATA
+    CLASSIFICATION_DATA, DETECTION_DATA, CAPTCHA_DATA, REGION_DATA, IMAGE_DATA, COMPARE_DATA, WRITING_DATA, SWAG_DATA, TAG_DATA, OLD_CLASSIFICATION_DATA, STUDY_DATA, DET_DATA, SUPER_DATA, LETTERBOX_DATA, REGRESSION_DATA, SEGMENTATION_DATA, INSTANCE_DATA, ISEG_DATA
 } data_type;
 
 typedef struct load_args{
@@ -608,19 +583,11 @@ typedef struct{
     float left, right, top, bottom;
 } box_label;
 
-#ifdef __cplusplus
-extern "C" {
-#endif  // __cplusplus
 
 network *load_network(char *cfg, char *weights, int clear);
 load_args get_base_args(network *net);
 
 void free_data(data d);
-
-#ifdef __cplusplus
-}
-#endif  // __cplusplus
-
 
 typedef struct node{
     void *val;
@@ -634,13 +601,7 @@ typedef struct list{
     node *back;
 } list;
 
-#ifdef __cplusplus
-extern "C" {
-#endif  // __cplusplus
-
-#if 0
-pthread_t load_data(load_args args);
-#endif
+// pthread_t load_data(load_args args);
 list *read_data_cfg(char *filename);
 list *read_cfg(char *filename);
 unsigned char *read_file(char *filename);
@@ -685,7 +646,8 @@ void harmless_update_network_gpu(network *net);
 #endif
 image get_label(image **characters, char *string, int size);
 void draw_label(image a, int r, int c, image label, const float *rgb);
-void save_image_png(image im, const char *name);
+void save_image(image im, const char *name);
+void save_image_options(image im, const char *name, IMTYPE f, int quality);
 void get_next_batch(data d, int n, int offset, float *X, float *y);
 void grayscale_image_3c(image im);
 void normalize_image(image p);
@@ -717,9 +679,9 @@ char *option_find_str(list *l, char *key, char *def);
 int option_find_int(list *l, char *key, int def);
 int option_find_int_quiet(list *l, char *key, int def);
 
-DARKNET_EXPORTS network *parse_network_cfg(char *filename);
+network *parse_network_cfg(char *filename);
 void save_weights(network *net, char *filename);
-DARKNET_EXPORTS void load_weights(network *net, char *filename);
+void load_weights(network *net, char *filename);
 void save_weights_upto(network *net, char *filename, int cutoff);
 void load_weights_upto(network *net, char *filename, int start, int cutoff);
 
@@ -727,7 +689,7 @@ void zero_objectness(layer l);
 void get_region_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, float tree_thresh, int relative, detection *dets);
 int get_yolo_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, int relative, detection *dets);
 void free_network(network *net);
-DARKNET_EXPORTS void set_batch_network(network *net, int b);
+void set_batch_network(network *net, int b);
 void set_temp_network(network *net, float t);
 image load_image(char *filename, int w, int h, int c);
 image load_image_color(char *filename, int w, int h);
@@ -744,8 +706,7 @@ image mask_to_rgb(image mask);
 int resize_network(network *net, int w, int h);
 void free_matrix(matrix m);
 void test_resize(char *filename);
-void save_image(image p, const char *name);
-void show_image(image p, const char *name);
+int show_image(image p, const char *name, int ms);
 image copy_image(image p);
 void draw_box_width(image a, int x1, int y1, int x2, int y2, int w, float r, float g, float b);
 float get_current_rate(network *net);
@@ -776,7 +737,7 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
 matrix network_predict_data(network *net, data test);
 image **load_alphabet();
 image get_network_image(network *net);
-DARKNET_EXPORTS float *network_predict(network *net, float *input);
+float *network_predict(network *net, float *input);
 
 int network_width(network *net);
 int network_height(network *net);
@@ -793,17 +754,16 @@ void do_nms_sort(detection *dets, int total, int classes, float thresh);
 
 matrix make_matrix(int rows, int cols);
 
-#ifndef __cplusplus
 #ifdef OPENCV
-image get_image_from_stream(CvCapture *cap);
+void *open_video_stream(const char *f, int c, int w, int h, int fps);
+image get_image_from_stream(void *p);
+void make_window(char *name, int w, int h, int fullscreen);
 #endif
-#endif
+
 void free_image(image m);
-#if 0
 float train_network(network *net, data d);
-pthread_t load_data_in_thread(load_args args);
+// pthread_t load_data_in_thread(load_args args);
 void load_data_blocking(load_args args);
-#endif
 list *get_paths(char *filename);
 void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride);
 void change_leaves(tree *t, char *leaf_list);
@@ -817,12 +777,12 @@ void find_replace(char *str, char *orig, char *rep, char *output);
 void free_ptrs(void **ptrs, int n);
 char *fgetl(FILE *fp);
 void strip(char *s);
-float sec(clock_t clocks);
+// float sec(clock_t clocks);
 void **list_to_array(list *l);
 void top_k(float *a, int n, int k, int *index);
 int *read_map(char *filename);
-DARKNET_EXPORTS void error(const char *s);
-DARKNET_EXPORTS int max_index(float *a, int n);
+void error(const char *s);
+int max_index(float *a, int n);
 int max_int_index(int *a, int n);
 int sample_array(float *a, int n);
 int *random_index_order(int min, int max);
@@ -841,6 +801,5 @@ float rand_uniform(float min, float max);
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
-
+#endif
 #endif

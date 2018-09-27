@@ -26,7 +26,7 @@ IF(CUDA_FOUND)
   # Pass options to NVCC
   IF(${CMAKE_SYSTEM_NAME} STREQUAL Windows)
     SET(CUDA_NVCC_FLAGS_DEBUG   ${CUDA_NVCC_FLAGS_DEBUG};   -O3 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_61,code=sm_61 -Xcompiler "/MDd")
-	SET(CUDA_NVCC_FLAGS_RELEASE ${CUDA_NVCC_FLAGS_RELEASE}; -O3 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_61,code=sm_61 -Xcompiler "/MD")
+	  SET(CUDA_NVCC_FLAGS_RELEASE ${CUDA_NVCC_FLAGS_RELEASE}; -O3 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_61,code=sm_61 -Xcompiler "/MD")
   ELSE()
     SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_61,code=sm_61)
   ENDIF()
@@ -63,6 +63,7 @@ FILE(GLOB hdrs "include/darknet.h"
 	src/gru_layer.h
 	src/im2col.h
 	src/image.h
+	src/iseg_layer.h
 	src/l2norm_layer.h
 	src/layer.h
 	src/list.h
@@ -89,51 +90,52 @@ FILE(GLOB hdrs "include/darknet.h"
 	src/yolo_layer.h
   )
 FILE(GLOB srcs 
-	src/activations.c
-	src/activation_layer.c
-	src/avgpool_layer.c
-	src/batchnorm_layer.c
-	src/blas.c
-	src/box.c
-	src/col2im.c
-	# src/compare.c
-	src/connected_layer.c
-	src/convolutional_layer.c
-	src/cost_layer.c
-	src/crnn_layer.c
-	src/crop_layer.c
-	src/cuda.c
-	src/data.c
-	src/deconvolutional_layer.c
-	# src/demo.c
-	src/detection_layer.c
-	src/dropout_layer.c
-	src/gemm.c
-	src/gru_layer.c
-	src/im2col.c
-	src/image.c
-	src/l2norm_layer.c
-	src/layer.c
-	src/list.c
-	src/local_layer.c
-	src/logistic_layer.c
-	src/lstm_layer.c
-	src/matrix.c
-	src/maxpool_layer.c
-	src/network.c
-	src/normalization_layer.c
-	src/option_list.c
-	src/parser.c
-	src/region_layer.c
-	src/reorg_layer.c
-	src/rnn_layer.c
-	src/route_layer.c
-	src/shortcut_layer.c
-	src/softmax_layer.c
-	src/tree.c
-	src/upsample_layer.c
-	src/utils.c
-	src/yolo_layer.c  
+src/activations.c
+src/activation_layer.c
+src/avgpool_layer.c
+src/batchnorm_layer.c
+src/blas.c
+src/box.c
+src/col2im.c
+# src/compare.c
+src/connected_layer.c
+src/convolutional_layer.c
+src/cost_layer.c
+src/crnn_layer.c
+src/crop_layer.c
+src/cuda.c
+src/data.c
+src/deconvolutional_layer.c
+# src/demo.c
+src/detection_layer.c
+src/dropout_layer.c
+src/gemm.c
+src/gru_layer.c
+src/im2col.c
+src/image.c
+src/iseg_layer.c
+src/l2norm_layer.c
+src/layer.c
+src/list.c
+src/local_layer.c
+src/logistic_layer.c
+src/lstm_layer.c
+src/matrix.c
+src/maxpool_layer.c
+src/network.c
+src/normalization_layer.c
+src/option_list.c
+src/parser.c
+src/region_layer.c
+src/reorg_layer.c
+src/rnn_layer.c
+src/route_layer.c
+src/shortcut_layer.c
+src/softmax_layer.c
+src/tree.c
+src/upsample_layer.c
+src/utils.c
+src/yolo_layer.c
 )
 
 SOURCE_GROUP("Header Files" FILES ${hdrs})

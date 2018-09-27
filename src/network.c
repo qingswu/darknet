@@ -286,7 +286,6 @@ void backward_network(network *netp)
     }
 }
 
-#if 0
 float train_network_datum(network *net)
 {
     *net->seen += net->batch;
@@ -327,7 +326,6 @@ float train_network(network *net, data d)
     }
     return (float)sum/(n*batch);
 }
-#endif
 
 void set_temp_network(network *net, float t)
 {
@@ -447,7 +445,7 @@ layer get_network_detection_layer(network *net)
             return net->layers[i];
         }
     }
-    //fprintf(stderr, "Detection layer not found!!\n");
+    fprintf(stderr, "Detection layer not found!!\n");
     layer l = {0};
     return l;
 }
@@ -647,11 +645,11 @@ void print_network(network *net)
         int n = l.outputs;
         float mean = mean_array(output, n);
         float vari = variance_array(output, n);
-        //fprintf(stderr, "Layer %d - Mean: %f, Variance: %f\n",i,mean, vari);
+        fprintf(stderr, "Layer %d - Mean: %f, Variance: %f\n",i,mean, vari);
         if(n > 100) n = 100;
-        //for(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
-        //if(n == 100)fprintf(stderr,".....\n");
-        //fprintf(stderr, "\n");
+        for(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
+        if(n == 100)fprintf(stderr,".....\n");
+        fprintf(stderr, "\n");
     }
 }
 
@@ -865,7 +863,6 @@ void *train_thread(void *ptr)
     *args.err = train_network(args.net, args.d);
     return 0;
 }
-
 pthread_t train_network_in_thread(network *net, data d, float *err)
 {
     pthread_t thread;

@@ -5,6 +5,7 @@
 #include <assert.h>
 #ifndef _WIN32
 #include <unistd.h>
+#include <sys/time.h>
 #else
 #include <Windows.h>
 #include <mmsystem.h>
@@ -81,6 +82,7 @@ int *read_map(char *filename)
     return map;
 }
 
+#if 0
 void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
 {
     size_t i;
@@ -88,7 +90,7 @@ void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
         size_t start = n*i/sections;
         size_t end = n*(i+1)/sections;
         size_t num = end-start;
-        shuffle((char*)arr+(start*size), num, size);
+        shuffle(arr+(start*size), num, size);
     }
 }
 
@@ -98,11 +100,12 @@ void shuffle(void *arr, size_t n, size_t size)
     void *swp = calloc(1, size);
     for(i = 0; i < n-1; ++i){
         size_t j = i + rand()/(RAND_MAX / (n-i)+1);
-        memcpy(swp, (char*)arr+(j*size), size);
-        memcpy((char*)arr+(j*size), (char*)arr+(i*size), size);
-        memcpy((char*)arr+(i*size), swp,          size);
+        memcpy(swp,          arr+(j*size), size);
+        memcpy(arr+(j*size), arr+(i*size), size);
+        memcpy(arr+(i*size), swp,          size);
     }
 }
+#endif
 
 int *random_index_order(int min, int max)
 {

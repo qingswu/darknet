@@ -1,8 +1,6 @@
 #ifndef DATA_H
 #define DATA_H
-#if 0
-#include <pthread.h>
-#endif
+// #include <pthread.h>
 
 #include "darknet.h"
 #include "matrix.h"
@@ -20,7 +18,7 @@ static inline float distance_from_edge(int x, int max)
     if (dist > 1) dist = 1;
     return dist;
 }
-void load_data_blocking(load_args args);
+// void load_data_blocking(load_args args);
 
 
 void print_letters(float *pred, int n);
